@@ -3,14 +3,15 @@ import { r2Storage } from '@/storage';
 import {
   IMAGE_MIME_TYPES,
   VIDEO_MIME_TYPES,
+  AUDIO_MIME_TYPES,
   PDF_MIME_TYPES,
   MAX_IMAGE_SIZE,
   MAX_VIDEO_SIZE,
+  MAX_AUDIO_SIZE,
   MAX_PDF_SIZE,
 } from '@/types/upload';
 
-
-type ValidationResult = { valid: true; type: 'image' | 'video' | 'pdf' } | { valid: false; error: string; status: number };
+type ValidationResult = { valid: true; type: 'image' | 'video' | 'audio' | 'pdf' } | { valid: false; error: string; status: number };
 
 function validateFile(file: File): ValidationResult {
   if (!file) {
@@ -18,8 +19,9 @@ function validateFile(file: File): ValidationResult {
   }
   const isImage = IMAGE_MIME_TYPES.includes(file.type);
   const isVideo = VIDEO_MIME_TYPES.includes(file.type);
+  const isAudio = AUDIO_MIME_TYPES.includes(file.type);
   const isPDF = PDF_MIME_TYPES.includes(file.type as import('@/types/upload').PDFMimeType);
-  if (!isImage && !isVideo && !isPDF) {
+  if (!isImage && !isVideo && !isAudio && !isPDF) {
     return { valid: false, error: 'Unsupported file type', status: 400 };
   }
   if (isImage && file.size > MAX_IMAGE_SIZE) {
@@ -28,11 +30,15 @@ function validateFile(file: File): ValidationResult {
   if (isVideo && file.size > MAX_VIDEO_SIZE) {
     return { valid: false, error: 'Video too large', status: 400 };
   }
+  if (isAudio && file.size > MAX_AUDIO_SIZE) {
+    return { valid: false, error: 'Audio too large', status: 400 };
+  }
   if (isPDF && file.size > MAX_PDF_SIZE) {
     return { valid: false, error: 'PDF too large', status: 400 };
   }
   if (isImage) return { valid: true, type: 'image' };
   if (isVideo) return { valid: true, type: 'video' };
+  if (isAudio) return { valid: true, type: 'audio' };
   if (isPDF) return { valid: true, type: 'pdf' };
   return { valid: false, error: 'Unknown file type', status: 400 };
 }
@@ -44,13 +50,13 @@ function generateUploadKey(file: File) {
     folder = 'uploads/videos';
   } else if (file.type.startsWith('image/')) {
     folder = 'uploads/images';
+  } else if (file.type.startsWith('audio/')) {
+    folder = 'uploads/audios';
   } else if (PDF_MIME_TYPES.includes(file.type as import('@/types/upload').PDFMimeType)) {
     folder = 'uploads/pdfs';
   }
   return `${folder}/${Date.now()}-${safe}`;
 }
-
-
 
 export async function POST(req: Request) {
   try {

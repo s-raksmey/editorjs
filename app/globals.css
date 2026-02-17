@@ -69,3 +69,516 @@ body {
 .cdx-attaches__download-button * {
   color: #181c2b !important;
 }
+
+.audio-block-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: stretch;
+}
+.audio-upload-droparea {
+  border: 2px dashed #36435d;
+  background: #111a26;
+  border-radius: 10px;
+  min-height: 205px;
+  transition:
+    border-color 0.18s,
+    background 0.18s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-bottom: 12px;
+}
+.audio-upload-droparea.is-over {
+  border-color: #2279e0;
+  background: #16223a;
+}
+.audio-upload-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+.audio-upload-icon {
+  margin-bottom: 10px;
+}
+.audio-upload-title {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #eee;
+}
+.audio-upload-desc {
+  color: #bfc9d9;
+  margin-bottom: 2px;
+}
+.audio-upload-tip {
+  color: #54637a;
+  font-size: 0.98em;
+}
+.audio-upload-divider {
+  text-align: center;
+  font-size: 1.1em;
+  line-height: 1;
+  color: #484a57;
+  position: relative;
+  margin: 15px 0 6px 0;
+}
+.audio-upload-divider:before,
+.audio-upload-divider:after {
+  content: "";
+  display: inline-block;
+  vertical-align: middle;
+  width: 40%;
+  height: 1.5px;
+  background: #242b38;
+  margin: 0 7px;
+}
+.audio-upload-divider span {
+  background: #182337;
+  padding: 2px 16px;
+  border-radius: 5px;
+  font-size: 0.98em;
+  font-weight: 700;
+}
+.audio-upload-url-row {
+  display: flex;
+  gap: 9px;
+  margin-top: 0;
+}
+.audio-upload-url {
+  flex: 1 1 0%;
+  border: none;
+  background: #141f32;
+  color: #b6c7e4;
+  border-radius: 6px 0 0 6px;
+  font-size: 1.07rem;
+  padding: 11px 14px;
+  outline: none;
+}
+.audio-upload-url-btn {
+  border: none;
+  background: #3060d9;
+  color: #fff;
+  font-weight: 500;
+  font-size: 1rem;
+  border-radius: 0 6px 6px 0;
+  padding: 0 28px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.audio-upload-url-btn:hover {
+  background: #2279e0;
+}
+.audio-file-preview {
+  background: #182337;
+  border: 1.5px solid #222c3b;
+  border-radius: 11px;
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  gap: 17px;
+  padding: 14px 23px 14px 17px;
+}
+.audio-icon {
+  margin-right: 3px;
+}
+.audio-meta {
+  flex: 1 1 0%;
+  display: flex;
+  flex-direction: column;
+  font-size: 1.07em;
+}
+.audio-filename {
+  color: #f3f3f5;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+.audio-fileinfo {
+  color: #7b858b;
+  font-size: 0.97em;
+}
+.audio-filesize {
+  color: #8ebaff;
+  font-size: 0.97em;
+}
+.audio-actions {
+  display: flex;
+  gap: 10px;
+}
+.audio-action-play {
+  border: none;
+  background: #2a2d3b;
+  color: #fff;
+  font-weight: 600;
+  border-radius: 7px;
+  font-size: 1.1em;
+  padding: 8px 10px 7px 10px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: background 0.16s;
+}
+.audio-action-play:hover {
+  background: #36435d;
+}
+.audio-action-replace {
+  border: none;
+  background: #232c40;
+  color: #fff;
+  font-weight: 500;
+  border-radius: 7px;
+  font-size: 1.05em;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+  transition: background 0.16s;
+}
+.audio-action-replace:hover {
+  background: #36435d;
+}
+audio {
+  margin-top: 8px;
+  border-radius: 8px;
+  background: #f5f5f6;
+  box-shadow: 0 0 0 1px #ececec;
+  width: 220px;
+}
+
+.pdf-block-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: stretch;
+}
+.pdf-upload-droparea {
+  border: 2px dashed #36435d;
+  background: #111a26;
+  border-radius: 10px;
+  min-height: 205px;
+  transition:
+    border-color 0.18s,
+    background 0.18s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-bottom: 12px;
+}
+.pdf-upload-droparea.is-over {
+  border-color: #2279e0;
+  background: #16223a;
+}
+.pdf-upload-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+.pdf-upload-icon {
+  margin-bottom: 10px;
+}
+.pdf-upload-title {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #eee;
+}
+.pdf-upload-desc {
+  color: #bfc9d9;
+  margin-bottom: 2px;
+}
+.pdf-upload-tip {
+  color: #54637a;
+  font-size: 0.98em;
+}
+.pdf-upload-divider {
+  text-align: center;
+  font-size: 1.1em;
+  line-height: 1;
+  color: #484a57;
+  position: relative;
+  margin: 15px 0 6px 0;
+}
+.pdf-upload-divider:before,
+.pdf-upload-divider:after {
+  content: "";
+  display: inline-block;
+  vertical-align: middle;
+  width: 40%;
+  height: 1.5px;
+  background: #242b38;
+  margin: 0 7px;
+}
+.pdf-upload-divider span {
+  background: #182337;
+  padding: 2px 16px;
+  border-radius: 5px;
+  font-size: 0.98em;
+  font-weight: 700;
+}
+.pdf-upload-url-row {
+  display: flex;
+  gap: 9px;
+  margin-top: 0;
+}
+.pdf-upload-url {
+  flex: 1 1 0%;
+  border: none;
+  background: #141f32;
+  color: #b6c7e4;
+  border-radius: 6px 0 0 6px;
+  font-size: 1.07rem;
+  padding: 11px 14px;
+  outline: none;
+}
+.pdf-upload-url-btn {
+  border: none;
+  background: #3060d9;
+  color: #fff;
+  font-weight: 500;
+  font-size: 1rem;
+  border-radius: 0 6px 6px 0;
+  padding: 0 28px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.pdf-upload-url-btn:hover {
+  background: #2279e0;
+}
+
+.pdf-file-preview {
+  background: #182337;
+  border: 1.5px solid #222c3b;
+  border-radius: 11px;
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  gap: 17px;
+  padding: 14px 23px 14px 17px;
+}
+.pdf-icon {
+  margin-right: 3px;
+}
+.pdf-meta {
+  flex: 1 1 0%;
+  display: flex;
+  flex-direction: column;
+  font-size: 1.07em;
+}
+.pdf-filename {
+  color: #f3f3f5;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+.pdf-fileinfo {
+  color: #7b858b;
+  font-size: 0.97em;
+}
+.pdf-filesize {
+  color: #8ebaff;
+  font-size: 0.97em;
+}
+.pdf-actions {
+  display: flex;
+  gap: 10px;
+}
+.pdf-action-view {
+  border: none;
+  background: #16d797;
+  color: #fff;
+  font-weight: 600;
+  border-radius: 7px;
+  font-size: 1.1em;
+  padding: 8px 10px 7px 10px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: background 0.16s;
+}
+.pdf-action-view:hover {
+  background: #1ae7a1;
+}
+.pdf-action-replace {
+  border: none;
+  background: #232c40;
+  color: #fff;
+  font-weight: 500;
+  border-radius: 7px;
+  font-size: 1.05em;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+  transition: background 0.16s;
+}
+.pdf-action-replace:hover {
+  background: #36435d;
+}
+
+.video-block-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: stretch;
+}
+.video-upload-droparea {
+  border: 2px dashed #36435d;
+  background: #111a26;
+  border-radius: 10px;
+  min-height: 205px;
+  transition:
+    border-color 0.18s,
+    background 0.18s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-bottom: 12px;
+}
+.video-upload-droparea.is-over {
+  border-color: #5ac5fa;
+  background: #16223a;
+}
+.video-upload-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+.video-upload-icon {
+  margin-bottom: 10px;
+}
+.video-upload-title {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #5ac5fa;
+}
+.video-upload-desc {
+  color: #bfc9d9;
+  margin-bottom: 2px;
+}
+.video-upload-tip {
+  color: #298dcc;
+  font-size: 0.99em;
+}
+.video-upload-divider {
+  text-align: center;
+  font-size: 1.1em;
+  line-height: 1;
+  color: #484a57;
+  position: relative;
+  margin: 15px 0 6px 0;
+}
+.video-upload-divider:before,
+.video-upload-divider:after {
+  content: "";
+  display: inline-block;
+  vertical-align: middle;
+  width: 40%;
+  height: 1.5px;
+  background: #242b38;
+  margin: 0 7px;
+}
+.video-upload-divider span {
+  background: #182337;
+  padding: 2px 16px;
+  border-radius: 5px;
+  font-size: 0.98em;
+  font-weight: 700;
+}
+.video-upload-url-row {
+  display: flex;
+  gap: 9px;
+  margin-top: 0;
+}
+.video-upload-url {
+  flex: 1 1 0%;
+  border: none;
+  background: #141f32;
+  color: #b6c7e4;
+  border-radius: 6px 0 0 6px;
+  font-size: 1.07rem;
+  padding: 11px 14px;
+  outline: none;
+}
+.video-upload-url-btn {
+  border: none;
+  background: #5ac5fa;
+  color: #fff;
+  font-weight: 500;
+  font-size: 1rem;
+  border-radius: 0 6px 6px 0;
+  padding: 0 28px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.video-upload-url-btn:hover {
+  background: #298dcc;
+}
+
+.video-file-preview {
+  background: #182337;
+  border: 1.5px solid #222c3b;
+  border-radius: 11px;
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  gap: 17px;
+  padding: 14px 23px 14px 17px;
+}
+.video-icon {
+  margin-right: 3px;
+}
+.video-meta {
+  flex: 1 1 0%;
+  display: flex;
+  flex-direction: column;
+  font-size: 1.07em;
+}
+.video-filename {
+  color: #f3f3f5;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+.video-fileinfo {
+  color: #7b858b;
+  font-size: 0.97em;
+}
+.video-filesize {
+  color: #5ac5fa;
+  font-size: 0.97em;
+}
+.video-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+}
+.video-action-replace {
+  border: none;
+  background: #232c40;
+  color: #fff;
+  font-weight: 500;
+  border-radius: 7px;
+  font-size: 1.05em;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+  transition: background 0.16s;
+}
+.video-action-replace:hover {
+  background: #36435d;
+}
+.video-embed-preview {
+  margin-top: 9px;
+}
