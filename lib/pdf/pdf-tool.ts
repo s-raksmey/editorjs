@@ -151,44 +151,9 @@ export default class PDFTool implements BlockTool {
       if (file) await this.handleFile(file);
     };
 
-    // Divider ("or")
-    const divider = document.createElement("div");
-    divider.className = "pdf-upload-divider";
-    divider.innerHTML = `<span>or</span>`;
-
-    // URL input group
-    const urlRow = document.createElement("div");
-    urlRow.className = "pdf-upload-url-row";
-
-    const urlInput = document.createElement("input");
-    urlInput.type = "text";
-    urlInput.className = "pdf-upload-url";
-    urlInput.placeholder = "Paste PDF URL here...";
-
-    const loadBtn = document.createElement("button");
-    loadBtn.className = "pdf-upload-url-btn";
-    loadBtn.textContent = "Load";
-
-    loadBtn.onclick = () => {
-      const val = urlInput.value.trim();
-      if (val && val.endsWith(".pdf")) {
-        this.data.url = val;
-        this.data.name = val.split("/").pop();
-        this.data.size = undefined;
-        this.renderFilePreview();
-      } else {
-        alert("Please enter a valid PDF URL");
-      }
-    };
-
-    urlRow.appendChild(urlInput);
-    urlRow.appendChild(loadBtn);
-
     // Compose all in wrapper
     this.wrapper.appendChild(dropArea);
     this.wrapper.appendChild(this.fileInput);
-    this.wrapper.appendChild(divider);
-    this.wrapper.appendChild(urlRow);
   }
 
   /** File upload logic + metadata */

@@ -1,6 +1,21 @@
 import { BlockTool } from '@editorjs/editorjs';
 import { videoUploader } from '@/components/editor/EditorUploaders';
 
+declare global {
+  interface Window {
+    FB?: {
+      XFBML?: {
+        parse?: (container?: HTMLElement) => void;
+      };
+    };
+    instgrm?: {
+      Embeds?: {
+        process?: () => void;
+      };
+    };
+  }
+}
+
 interface VideoData {
   url: string;
   type: 'upload' | 'embed';
@@ -8,8 +23,10 @@ interface VideoData {
   videoId?: string;
 }
 
+const FB_PLAYER_WIDTH = 400;
 
-const FB_PLAYER_WIDTH = 400; // <--- control width here
+// Accepts raw Facebook embed block with data-href
+const FB_EMBED_BLOCK_REGEX = /<div id="fb-root[\s\S.]*?data-href="([^"]+).*fb-xfbml-parse-ignore"><\/div><\/div>/i;
 
 const VIDEO_EMBED_PATTERNS = [
   {
@@ -21,17 +38,11 @@ const VIDEO_EMBED_PATTERNS = [
   },
   {
     name: 'Facebook',
-    regex: /(?:https?:\/\/)?(?:www\.)?facebook\.com\/[^/]+\/videos\/([0-9]+)/,
+    // Matches /videos/ID, /reel/ID, /watch?v=ID
+    regex: /(?:https?:\/\/)?(?:www\.)?facebook\.com\/(?:(?:[^/]+\/videos|reel)\/([0-9]+)|watch\/?\?v=([0-9]+))/,
     getEmbed: (_id: string, url: string) =>
       `<div class="fb-video" data-href="${url}" data-width="${FB_PLAYER_WIDTH}" data-show-text="false"></div>`,
     provider: 'facebook'
-  },
-  {
-    name: 'FacebookReel',
-    regex: /(?:https?:\/\/)?(?:www\.)?facebook\.com\/reel\/([0-9]+)/,
-    getEmbed: (_id: string, url: string) =>
-      `<div class="fb-video" data-href="${url}" data-width="${FB_PLAYER_WIDTH}" data-show-text="false"></div>`,
-    provider: 'facebook-reel'
   },
   {
     name: 'TikTok',
@@ -107,7 +118,7 @@ export default class VideoTool implements BlockTool {
       player = document.createElement('div');
       player.className = 'video-embed-block';
       if (pattern) {
-        player.innerHTML = pattern.getEmbed?.(this.data.videoId!, this.data.url) || '';
+        player.innerHTML = pattern.getEmbed?.(this.data.videoId || '', this.data.url) || '';
         setTimeout(() => this.mountProviderPlayer(player!), 0);
       }
     }
@@ -169,31 +180,43 @@ export default class VideoTool implements BlockTool {
       if (file) await this.handleFile(file);
     };
 
-    const divider = document.createElement('div');
-    divider.className = 'video-upload-divider';
-    divider.innerHTML = `<span>or</span>`;
+    // Embedding Section
+    const embedSection = document.createElement('div');
+    embedSection.className = 'video-link-embed-section';
+    embedSection.innerHTML = `
+      <div class="video-link-input-wrapper" style="margin-top:16px; display:flex; align-items:center;">
+        <input
+          type="text"
+          class="video-link-input"
+          placeholder="Paste a YouTube, Facebook video/reel/watch link, Instagram, TikTok URL, or Facebook embed block"
+          style="width: 340px; padding: 8px; border-radius: 4px; border: 1px solid #cceafd;"
+        />
+        <button class="video-link-embed-btn" style="margin-left: 8px; padding: 8px 14px; background: #5ac5fa; color: #fff; border: none; border-radius: 4px; cursor: pointer;">
+          Embed
+        </button>
+      </div>
+      <div class="video-link-format-tip" style="margin-top: 8px; color: #6ccffc; font-size: 12px;">
+        Facebook formats supported: 
+        <br>
+        <code>https://facebook.com/{page}/videos/{id}</code>, 
+        <code>https://facebook.com/watch?v={id}</code>, 
+        <code>https://facebook.com/reel/{id}</code> &amp; raw Facebook embed blocks.<br>
+        Share links are <strong>not supported</strong>.
+      </div>
+    `;
+    const inputEl = embedSection.querySelector('input')!;
+    const btnEl = embedSection.querySelector('button')!;
 
-    const urlRow = document.createElement('div');
-    urlRow.className = 'video-upload-url-row';
-
-    const urlInput = document.createElement('input');
-    urlInput.type = 'text';
-    urlInput.className = 'video-upload-url';
-    urlInput.placeholder = 'Paste a YouTube, Facebook, TikTok, or Instagram video link here...';
-
-    const loadBtn = document.createElement('button');
-    loadBtn.className = 'video-upload-url-btn';
-    loadBtn.textContent = 'Load';
-
-    loadBtn.onclick = () => this.handleEmbedURL(urlInput.value.trim());
-
-    urlRow.appendChild(urlInput);
-    urlRow.appendChild(loadBtn);
+    btnEl.onclick = () => this.handleEmbedURL(inputEl.value.trim());
+    inputEl.onkeydown = (e: KeyboardEvent) => {
+      if (e.key === 'Enter') {
+        this.handleEmbedURL(inputEl.value.trim());
+      }
+    };
 
     this.wrapper.appendChild(dropArea);
     this.wrapper.appendChild(this.fileInput);
-    this.wrapper.appendChild(divider);
-    this.wrapper.appendChild(urlRow);
+    this.wrapper.appendChild(embedSection);
   }
 
   private async handleFile(file: File) {
@@ -216,17 +239,33 @@ export default class VideoTool implements BlockTool {
       } else {
         alert(result.message || 'Upload failed');
       }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (err) {
+    } catch {
       alert('Upload failed');
     }
   }
 
+  // Enhanced to accept Facebook watch, reel, video links, and raw embed
   private handleEmbedURL(url: string) {
     if (!url) {
       alert('Please enter a video URL');
       return;
     }
+
+    // 1. Detect raw Facebook embed HTML
+    const fbMatch = url.match(FB_EMBED_BLOCK_REGEX);
+    if (fbMatch) {
+      const fbVideoUrl = fbMatch[1];
+      this.data = {
+        url: fbVideoUrl,
+        type: 'embed',
+        provider: 'facebook',
+        videoId: undefined
+      };
+      this.renderVideoOnlyPreview();
+      return;
+    }
+
+    // 2. URL pattern matchers
     for (const pattern of VIDEO_EMBED_PATTERNS) {
       const match = url.match(pattern.regex);
       if (match) {
@@ -234,22 +273,19 @@ export default class VideoTool implements BlockTool {
           url,
           type: 'embed',
           provider: pattern.provider,
-          videoId: match[1]
+          videoId: match[1] || match[2] // handle both group 1 and 2 for Facebook
         };
         this.renderVideoOnlyPreview();
         return;
       }
     }
-    alert('Unsupported video URL or provider.');
+    alert('Unsupported video URL or provider.\n\nPlease use direct YouTube/Facebook/TikTok/Instagram video links, not share links. See the input hint for examples.');
   }
 
   /** Handle provider-specific post-render operations (e.g. SDK, parse) */
   private async mountProviderPlayer(playerDiv: HTMLElement) {
     // Facebook
-    if (
-      this.data.provider === 'facebook' ||
-      this.data.provider === 'facebook-reel'
-    ) {
+    if (this.data.provider === 'facebook') {
       if (!document.getElementById('fb-root')) {
         const fbroot = document.createElement('div');
         fbroot.id = 'fb-root';
@@ -260,6 +296,14 @@ export default class VideoTool implements BlockTool {
         fbScript.id = 'fb-sdk';
         fbScript.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v17.0";
         fbScript.async = true;
+        fbScript.onerror = () => {
+          // Show a user-friendly message if blocked
+          const errorMsg = document.createElement('div');
+          errorMsg.style.color = 'red';
+          errorMsg.style.margin = '8px 0';
+          errorMsg.textContent = 'Facebook video embed cannot be loaded. The Facebook SDK was blocked by your browser or an extension.';
+          playerDiv.appendChild(errorMsg);
+        };
         document.body.appendChild(fbScript);
         fbScript.onload = () => this.callFBParse(playerDiv);
       } else {
@@ -293,7 +337,6 @@ export default class VideoTool implements BlockTool {
     }
   }
 
-  // Define a type for window with optional FB property
   private waitForFBSDK(container: HTMLElement, attempt: number) {
     interface FBWindow extends Window {
       FB?: {
@@ -309,19 +352,20 @@ export default class VideoTool implements BlockTool {
       setTimeout(() => this.waitForFBSDK(container, attempt + 1), 200);
     }
   }
-  /** Actually calls FB.XFBML.parse on the given container */
+
   private callFBParse(container: HTMLElement) {
     try {
-      // @ts-expect-error: FB may not be defined on window, but is injected by Facebook SDK
       if (window.FB && window.FB.XFBML && typeof window.FB.XFBML.parse === 'function') {
-        // @ts-expect-error: FB may not be defined on window, but is injected by Facebook SDK
         window.FB.XFBML.parse(container);
+        setTimeout(() => {
+          if (window.FB && window.FB.XFBML && typeof window.FB.XFBML.parse === 'function') {
+            window.FB.XFBML.parse(container);
+          }
+        }, 1000);
       }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (err) {/* swallow */}
+    } catch {/* swallow */}
   }
 
-  /** Instagram: try to process embeds */
   private callInstagramParse() {
     interface InstgrmWindow extends Window {
       instgrm?: {

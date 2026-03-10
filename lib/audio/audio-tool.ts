@@ -146,50 +146,8 @@ export default class AudioTool implements BlockTool {
       if (file) await this.handleFile(file);
     };
 
-    const divider = document.createElement('div');
-    divider.className = 'audio-upload-divider';
-    divider.innerHTML = `<span>or</span>`;
-
-    const urlRow = document.createElement('div');
-    urlRow.className = 'audio-upload-url-row';
-
-    const urlInput = document.createElement('input');
-    urlInput.type = 'text';
-    urlInput.className = 'audio-upload-url';
-    urlInput.placeholder = 'Paste audio URL here...';
-
-    const loadBtn = document.createElement('button');
-    loadBtn.className = 'audio-upload-url-btn';
-    loadBtn.textContent = 'Load';
-
-    loadBtn.onclick = () => {
-      const val = urlInput.value.trim();
-      if (
-        val &&
-        (
-          val.endsWith('.mp3') ||
-          val.startsWith('data:audio/mp3') ||
-          val.startsWith('data:audio/mpeg') ||
-          val.endsWith('.wav') ||
-          val.endsWith('.ogg')
-        )
-      ) {
-        this.data.url = val;
-        this.data.name = val.split('/').pop();
-        this.data.size = undefined;
-        this.renderAudioPreview();
-      } else {
-        alert('Please enter a valid audio URL');
-      }
-    };
-
-    urlRow.appendChild(urlInput);
-    urlRow.appendChild(loadBtn);
-
     this.wrapper.appendChild(dropArea);
     this.wrapper.appendChild(this.fileInput);
-    this.wrapper.appendChild(divider);
-    this.wrapper.appendChild(urlRow);
   }
 
   private async handleFile(file: File) {
