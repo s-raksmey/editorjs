@@ -1,6 +1,6 @@
-import { r2Storage } from "@/storage";
-import { validateFile } from "@/lib/upload/validate-file";
 import { generateUploadKey } from "@/lib/upload/generate-key";
+import { validateFile } from "@/lib/upload/validate-file";
+import { r2Storage } from "@/storage";
 
 export async function POST(req: Request) {
   try {
@@ -10,7 +10,7 @@ export async function POST(req: Request) {
     if (!(file instanceof File)) {
       return Response.json(
         { success: false, error: "No file" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -19,7 +19,7 @@ export async function POST(req: Request) {
     if (!validation.valid) {
       return Response.json(
         { success: false, error: validation.error },
-        { status: validation.status }
+        { status: validation.status },
       );
     }
 
@@ -41,7 +41,7 @@ export async function POST(req: Request) {
 
     return Response.json(
       { success: false, error: "Upload failed" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

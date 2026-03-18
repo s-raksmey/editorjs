@@ -6,5 +6,11 @@ export const env = {
     accessKeyId: process.env.R2_ACCESS_KEY,
     secretAccessKey: process.env.R2_SECRET_KEY,
     region: process.env.REGION,
+    isServer: typeof window === "undefined",
+  },
+  public: {
+    url: process.env.NEXT_PUBLIC_URL,
+    timezone: process.env.NEXT_PUBLIC_TIMEZONE,
+    graphqlUrl: process.env.NEXT_PUBLIC_GRAPHQL_URL,
   },
 };
