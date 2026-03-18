@@ -10,9 +10,9 @@ import CodeTool from "@editorjs/code";
 import InlineCode from "@editorjs/inline-code";
 import Embed from "@editorjs/embed";
 import LinkTool from "@editorjs/link";
-import AudioTool from "@/lib/audio/audio-tool";
-import PDFTool from "@/lib/pdf/pdf-tool";
-import VideoTool from "@/lib/video/video-tool";
+import AudioTool from "@/components/editor-tool/audio-tool";
+import PDFTool from "@/components/editor-tool/pdf-tool";
+import VideoTool from "@/components/editor-tool/video-tool";
 import Undo from "editorjs-undo";
 
 import {

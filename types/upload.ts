@@ -1,3 +1,40 @@
+export type UploadType = "image" | "video" | "audio" | "pdf";
+
+export interface FileConfig {
+  mime: readonly string[];
+  maxSize: number;
+  folder: string;
+}
+
+export const FILE_CONFIG: Record<UploadType, FileConfig> = {
+  image: {
+    mime: ["image/jpeg", "image/png", "image/webp", "image/gif"],
+    maxSize: 10 * 1024 * 1024,
+    folder: "uploads/images",
+  },
+
+  video: {
+    mime: ["video/mp4", "video/webm", "video/quicktime"],
+    maxSize: 100 * 1024 * 1024,
+    folder: "uploads/videos",
+  },
+
+  audio: {
+    mime: ["audio/mpeg", "audio/mp3", "audio/wav", "audio/ogg"],
+    maxSize: 50 * 1024 * 1024,
+    folder: "uploads/audios",
+  },
+
+  pdf: {
+    mime: ["application/pdf"],
+    maxSize: 20 * 1024 * 1024,
+    folder: "uploads/pdfs",
+  },
+};
+
+export type ValidationResult =
+  | { valid: true; type: UploadType }
+  | { valid: false; error: string; status: number };
 
 export interface EditorUploadResponse {
   success: 1 | 0;
@@ -9,68 +46,3 @@ export interface EditorUploadResponse {
   };
   message?: string;
 }
-export const VIDEO_MIME_TYPES = [
-  'video/mp4',
-  'video/webm',
-  'video/quicktime',
-];
-export interface UploadResult {
-  success: boolean;
-  url?: string;
-  error?: string;
-}
-
-export interface R2UploadOpts {
-  key: string;
-  buffer: Uint8Array;
-  mime: string;
-}
-
-export interface S3Config {
-  credentials?: {
-    accessKeyId: string;
-    secretAccessKey: string;
-  };
-  endpoint?: string;
-  region?: string;
-}
-
-export interface R2Config {
-  s3: S3Config;
-  bucket: string;
-  publicUrl: string;
-}
-
-export const IMAGE_MIME_TYPES = [
-  'image/jpeg',
-  'image/png',
-  'image/webp',
-  'image/gif',
-];
-
-
-
-export const AUDIO_MIME_TYPES = [
-  'audio/mpeg',
-  'audio/mp3',
-  'audio/wav',
-  'audio/ogg',
-  'audio/webm',
-];
-
-export const PDF_MIME_TYPES = [
-  'application/pdf',
-  'application/x-pdf',
-  'application/acrobat',
-  'application/vnd.pdf',
-  'text/pdf',
-  'text/x-pdf',
-] as const;
-
-export type PDFMimeType = typeof PDF_MIME_TYPES[number];
-
-export const MAX_PDF_SIZE = 20 * 1024 * 1024;
-
-export const MAX_IMAGE_SIZE = 10 * 1024 * 1024;
-export const MAX_VIDEO_SIZE = 100 * 1024 * 1024;
-export const MAX_AUDIO_SIZE = 50 * 1024 * 1024;
