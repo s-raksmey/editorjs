@@ -1,6 +1,6 @@
+import { SignedDownloadOptions, SignedUploadOptions } from "@/types/storage";
 import { S3Client } from "bun";
 import { StorageProvider } from "./storage-provider";
-import { SignedDownloadOptions, SignedUploadOptions } from "@/types/storage";
 
 export class R2Storage implements StorageProvider {
   private readonly client: S3Client;
